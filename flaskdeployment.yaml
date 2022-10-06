@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: flask-deployment
+  name: flask-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flaskservice
+  template:
+    metadata:
+      labels:
+        app: flaskservice
+    spec:
+      containers:
+      - image: docker.io/rahmanbadru/flaskapp:latest
+        imagePullPolicy: IfNotPresent
+        name: flaskapp
+        ports:
+          - containerPort: 5000
+        resources: 
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+          - name: name
+            valueFrom:
+              secretKeyRef:
+                name: flask-secret
+                key: name
+          - name: environment
+            valueFrom:
+              configMapKeyRef:
+                name: flask-config
+                key: environment

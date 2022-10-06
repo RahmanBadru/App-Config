@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: flaskservice
+  name: flaskservice
+spec:
+  ports:
+  - name: flask-app
+    port: 80
+    targetPort: 5000
+  selector:
+    app: flaskservice
+  type: NodePort
+
